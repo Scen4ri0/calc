@@ -1,6 +1,7 @@
 from flask import Flask, request
 app = Flask(__name__)
 
+
 @app.route('/add')
 def add():
     num1 = request.args.get('num1')
