@@ -1,38 +1,66 @@
-from flask import Flask, request
+from datetime import datetime
 
-app = Flask(__name__)
+import flask
+from flask import jsonify, request
 
-@app.route('/add', methods=['POST'])
-def add():
-    data = request.get_json()
-    num1 = data['num1']
-    num2 = data['num2']
-    result = num1 + num2
-    return {'result': result}
+app = flask.Flask(__name__)
+app.config["DEBUG"] = True
+results = []
 
-@app.route('/subtract', methods=['POST'])
-def subtract():
-    data = request.get_json()
-    num1 = data['num1']
-    num2 = data['num2']
-    result = num1 - num2
-    return {'result': result}
 
-@app.route('/multiply', methods=['POST'])
-def multiply():
-    data = request.get_json()
-    num1 = data['num1']
-    num2 = data['num2']
-    result = num1 * num2
-    return {'result': result}
+@app.route("/", methods=["GET"])
+def home():
+    # Return the most recent result, if results is empty then handle it gracefully
+    if not results:
+        response = dict(message="Most recent value not available")
+    else:
+        response = results[-1]
+    return response, 200
 
-@app.route('/divide', methods=['POST'])
-def divide():
-    data = request.get_json()
-    num1 = data['num1']
-    num2 = data['num2']
-    result = num1 / num2
-    return {'result': result}
 
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.route("/recentresults", methods=["GET"])
+def recent_results():
+    return jsonify(results[-10:][::-1]), 200
+
+
+@app.route("/allresults", methods=["GET"])
+def all_results():
+    return jsonify(results), 200
+
+
+@app.route("/operate", methods=["GET"])
+def operate():
+
+    if "operation" in request.args:
+        operation = request.args["operation"]
+    else:
+        return dict(error="Calculation Error", message="Invalid operation parameters"), 400
+    result = 0
+    # Check for the operation type and get the result
+    try:
+        if "+" in operation:
+            operatee = operation.split("+")
+            result = int(operatee[0]) + int(operatee[1])
+        if "-" in operation:
+            operatee = operation.split("-")
+            result = int(operatee[0]) - int(operatee[1])
+        if "*" in operation:
+            operatee = operation.split("*")
+            result = int(operatee[0]) * int(operatee[1])
+        if "/" in operation:
+            operatee = operation.split("/")
+            result = int(operatee[0]) / int(operatee[1])
+        response = {"updated_date": datetime.now(), "operation": operation, "result": result}
+        results.append(response)
+        return response, 200
+    except Exception as e:
+        return dict(error="Calculation Error", exception=str(e), message="Review operation parameters and try again"), 400
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return dict(response="This page does not exist"), 404
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0")
