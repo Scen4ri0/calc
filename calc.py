@@ -23,6 +23,7 @@ def subtract():
     else:
         return "Error: provide both numbers as query parameters"
 
+
 @app.route('/multiply')
 def multiply():
     num1 = request.args.get('num1')
