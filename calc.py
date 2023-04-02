@@ -12,6 +12,7 @@ def add():
     else:
         return "Error: provide both numbers as query parameters"
 
+
 @app.route('/subtract')
 def subtract():
     num1 = request.args.get('num1')
