@@ -1,18 +1,17 @@
-FROM ubuntu:latest
+FROM python:3
 
-RUN apt-get update -y\
-	&& apt-get install -y git\
-	g++\
-	clang
+WORKDIR /usr/src/app
 
-RUN echo "===> Cloning calculator..."\
-	&& cd /tmp \
-	&& git clone https://github.com/Scen4ri0/calc.git
+COPY calc.py ./ 
+	
+COPY requirements.txt ./ 
 
-RUN echo "===> Compiling calculator..."\
-	&& cd /tmp/calc \
-	&& g++ -o calculator calc.cpp
+RUN pip install --upgrade pip  
 
-CMD echo "Running calculator"\
-	&& cd /tmp/calc \
-	&& ./calculator
+RUN pip install --no-cache-dir -r requirements.txt \
+	flask
+
+EXPOSE 5000
+
+CMD ["python", "calc.py"]
+
