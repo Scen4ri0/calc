@@ -10,7 +10,7 @@ def add():
     return jsonify({'result': result})
 
 
-@app.route('/sub', methods=['POST'])
+@app.route('/substract', methods=['POST'])
 def subtract():
     num1 = request.form['num1']
     num2 = request.form['num2']
@@ -18,7 +18,7 @@ def subtract():
     return jsonify({'result': result})
 
 
-@app.route('/mult', methods=['POST'])
+@app.route('/multiply', methods=['POST'])
 def multiply():
     num1 = request.form['num1']
     num2 = request.form['num2']
@@ -26,7 +26,7 @@ def multiply():
     return jsonify({'result': result})
 
 
-@app.route('/div', methods=['POST'])
+@app.route('/divide', methods=['POST'])
 def divide():
     num1 = request.form['num1']
     num2 = request.form['num2']
