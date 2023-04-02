@@ -1,66 +1,47 @@
-from datetime import datetime
+from flask import Flask, request
+app = Flask(__name__)
 
-import flask
-from flask import jsonify, request
-
-app = flask.Flask(__name__)
-app.config["DEBUG"] = True
-results = []
-
-
-@app.route("/", methods=["GET"])
-def home():
-    # Return the most recent result, if results is empty then handle it gracefully
-    if not results:
-        response = dict(message="Most recent value not available")
+@app.route('/add')
+def add():
+    num1 = request.args.get('num1')
+    num2 = request.args.get('num2')
+    if num1 and num2:
+        result = str(float(num1) + float(num2))
+        return result
     else:
-        response = results[-1]
-    return response, 200
+        return "Error: provide both numbers as query parameters"
 
-
-@app.route("/recentresults", methods=["GET"])
-def recent_results():
-    return jsonify(results[-10:][::-1]), 200
-
-
-@app.route("/allresults", methods=["GET"])
-def all_results():
-    return jsonify(results), 200
-
-
-@app.route("/operate", methods=["GET"])
-def operate():
-
-    if "operation" in request.args:
-        operation = request.args["operation"]
+@app.route('/subtract')
+def subtract():
+    num1 = request.args.get('num1')
+    num2 = request.args.get('num2')
+    if num1 and num2:
+        result = str(float(num1) - float(num2))
+        return result
     else:
-        return dict(error="Calculation Error", message="Invalid operation parameters"), 400
-    result = 0
-    # Check for the operation type and get the result
-    try:
-        if "+" in operation:
-            operatee = operation.split("+")
-            result = int(operatee[0]) + int(operatee[1])
-        if "-" in operation:
-            operatee = operation.split("-")
-            result = int(operatee[0]) - int(operatee[1])
-        if "*" in operation:
-            operatee = operation.split("*")
-            result = int(operatee[0]) * int(operatee[1])
-        if "/" in operation:
-            operatee = operation.split("/")
-            result = int(operatee[0]) / int(operatee[1])
-        response = {"updated_date": datetime.now(), "operation": operation, "result": result}
-        results.append(response)
-        return response, 200
-    except Exception as e:
-        return dict(error="Calculation Error", exception=str(e), message="Review operation parameters and try again"), 400
+        return "Error: provide both numbers as query parameters"
 
+@app.route('/multiply')
+def multiply():
+    num1 = request.args.get('num1')
+    num2 = request.args.get('num2')
+    if num1 and num2:
+        result = str(float(num1) * float(num2))
+        return result
+    else:
+        return "Error: provide both numbers as query parameters"
 
-@app.errorhandler(404)
-def page_not_found(error):
-    return dict(response="This page does not exist"), 404
+@app.route('/divide')
+def divide():
+    num1 = request.args.get('num1')
+    num2 = request.args.get('num2')
+    if num1 and num2:
+        if float(num2) == 0:
+            return "Error: division by zero"
+        result = str(float(num1) / float(num2))
+        return result
+    else:
+        return "Error: provide both numbers as query parameters"
 
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+if __name__ == '__main__':
+    app.run(debug=True)
