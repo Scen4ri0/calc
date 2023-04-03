@@ -2,7 +2,7 @@ pipeline{
 	agent any
 	
 	triggers{
-		githubPush()
+		githubPush(credentialsId:'secret-id', breanchFilterType:'All')
 	}
 	
 	stages {
