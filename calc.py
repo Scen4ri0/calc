@@ -33,5 +33,6 @@ def divide():
     result = int(num1) / int(num2)
     return jsonify({'result': result})
 
+
 if __name__ == '__main__':
     app.run('0.0.0.0', 8000)
