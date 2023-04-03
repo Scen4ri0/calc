@@ -8,7 +8,7 @@ pipeline{
 	stages {
 		stage('Checkout'){
 			steps{
-				checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/Scen4ri0/calc']]]) 
+				checkout([$class: 'GitSCM', branches: [[name: 'main']], userRemoteConfigs: [[url: 'https://github.com/Scen4ri0/calc']]]) 
 			}
 		}
 	
