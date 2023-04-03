@@ -1,16 +1,11 @@
 CODE_CHANGES = getGitChanges()
 pipeline{
 	agent any
-	
-	when {
-		expression{
-			BRANCH_NAME == 'main' && CODE_CHANGES == true
-		}
-	}
+		
 	stages {
 		stage('Checkout'){
 			steps{
-				checkout scm 
+				checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/Scen4ri0/calc']]]) 
 			}
 		}
 	}
@@ -28,6 +23,12 @@ pipeline{
 			sh 'curl -d "num1=10&num2=13" -X POST http://localhost:8000/multiply'
 			sh 'docker stop $(docker ps -q --filter ancestor=calculator)'
 		}	
+	}
+
+	post{
+		triggers{
+			githubPush()
+		}
 	}
 }
 
