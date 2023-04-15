@@ -23,8 +23,21 @@ pipeline{
 				sh 'docker run -d -p 8000:8000 calculator'
 				sh 'sleep 60'
 				sh 'curl -d "num1=10&num2=13" -X POST http://localhost:8000/multiply'
+							}
+		}
+
+		stage('SAST'){
+			steps{
+				sh 'docker run -it calculator:latest bandit -r calc.py'
+			}		
+		}	
+		
+		
+		stage('deploy'){
+			setps{
 				sh 'docker stop $(docker ps -q --filter ancestor=calculator)'
-			}	
+
+			}
 		}	
 	}
 }
