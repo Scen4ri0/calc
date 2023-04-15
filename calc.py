@@ -26,7 +26,6 @@ def multiply():
     return jsonify({'result': result})
 
 
-
 @app.route('/divide', methods=['POST'])
 def divide():
     num1 = request.form['num1']
@@ -36,4 +35,4 @@ def divide():
 
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', 8000)
+    app.run('127.0.0.1', 8000)
