@@ -35,4 +35,4 @@ def divide():
 
 
 if __name__ == '__main__':
-    app.run('docker', 8000)
+    app.run('localhost', 8000)
