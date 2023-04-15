@@ -32,13 +32,12 @@ pipeline{
 			}		
 		}	
 		
-		
-		stage('deploy'){
-			steps{
-				sh 'docker stop $(docker ps -q --filter ancestor=calculator)'
+	}
+	post {
+		always {
+			sh 'docker stop $(docker ps -q --filter ancestor=calculator)'
 
-			}
-		}	
+		}
 	}
 }
 
