@@ -28,7 +28,7 @@ pipeline{
 
 		stage('SAST'){
 			steps{
-				sh 'docker run calculator:latest bandit -r calc.py'
+				sh 'docker run calculator:latest bandit -r /usr/src/app/calc.py'
 			}		
 		}	
 		
