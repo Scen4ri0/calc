@@ -34,7 +34,7 @@ pipeline{
 		
 		
 		stage('deploy'){
-			setps{
+			steps{
 				sh 'docker stop $(docker ps -q --filter ancestor=calculator)'
 
 			}
